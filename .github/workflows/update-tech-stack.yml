@@ -35,8 +35,9 @@ jobs:
               )
               return json.loads(result.stdout)
 
+          # Pulls every repo you own, including private ones
           repos = gh_api(
-              f"users/{username}/repos?per_page=100&type=owner"
+              "user/repos?per_page=100&affiliation=owner"
           )
 
           totals = {}
