@@ -1,6 +1,14 @@
-![PHP](https://img.shields.io/badge/PHP-93%25-777BB4?style=for-the-badge&logo=php&logoColor=white&labelColor=555555)
-![Laravel](https://img.shields.io/badge/LARAVEL-93%25-FF2D20?style=for-the-badge&logo=laravel&logoColor=white&labelColor=555555)
-![Python/Django](https://img.shields.io/badge/PYTHON%2FDJANGO-87%25-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=555555)
-![Node.js/Express](https://img.shields.io/badge/NODE.JS%2FEXPRESS-85%25-339933?style=for-the-badge&logo=nodedotjs&logoColor=white&labelColor=555555)
-![Java/Spring](https://img.shields.io/badge/JAVA%2FSPRING-80%25-F8981D?style=for-the-badge&logo=java&logoColor=white&labelColor=555555)
-![REST APIs](https://img.shields.io/badge/REST_APIs-90%25-005571?style=for-the-badge&logo=fastapi&logoColor=white&labelColor=555555)
+### 👨‍💻 Full-Stack Web Developer & Automation Specialist
+
+I focus on building robust web applications, automated software tools, and secure backend architectures.
+
+### 🛠️ Tech Stack & Capabilities
+
+<!-- START_DYNAMIC_TECH_STACK -->
+<!-- END_DYNAMIC_TECH_STACK -->
+
+### 🚀 What I Do
+*   **Backend Development:** Designing scalable backends with concurrent session limits, OAuth 2.0 flows, and secure dashboards.
+*   **Software Automation:** Building local and live web-based document generation tools like DOC2F.
+*   **Bot Development:** Creating automated backend architectures for tasks like Telegram link-forwarding bots.
+*   **Security:** Developing custom, stateless client-side HTML two-factor authentication tools and offline TOTP generators.
