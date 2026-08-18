@@ -5,6 +5,7 @@ I focus on building robust web applications, automated software tools, and secur
 ### 🛠️ Tech Stack & Capabilities
 
 <!-- START_DYNAMIC_TECH_STACK -->
+![Python](https://img.shields.io/badge/Python-100.0%25-3776AB?style=for-the-badge&logo=python&logoColor=white)
 <!-- END_DYNAMIC_TECH_STACK -->
 
 ### 🚀 What I Do
