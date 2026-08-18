@@ -1,202 +1,198 @@
 name: Update Tech Stack
 
 on:
-workflow_dispatch:
-schedule:
-- cron: "0 2 * * 1"
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * 1"
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-update-tech-stack:
-runs-on: ubuntu-latest
+  update-tech-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v4
 
-```
-steps:
-  - name: Checkout profile repository
-    uses: actions/checkout@v4
+      - name: Generate tech stack
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 <<'PY'
+          import json
+          import subprocess
+          import urllib.parse
 
-  - name: Generate tech stack
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    run: |
-      python3 <<'PY'
-      import json
-      import subprocess
-      import urllib.parse
+          username = "karanja-254"
 
-      username = "karanja-254"
-
-      def gh_api(endpoint):
-          result = subprocess.run(
-              ["gh", "api", endpoint],
-              capture_output=True,
-              text=True,
-              check=True
-          )
-          return json.loads(result.stdout)
-
-      repos = gh_api(
-          f"users/{username}/repos?per_page=100&type=owner"
-      )
-
-      totals = {}
-
-      for repo in repos:
-          if repo.get("fork"):
-              continue
-
-          name = repo["name"]
-
-          try:
-              languages = gh_api(
-                  f"repos/{username}/{name}/languages"
+          def gh_api(endpoint):
+              result = subprocess.run(
+                  ["gh", "api", endpoint],
+                  capture_output=True,
+                  text=True,
+                  check=True
               )
-          except Exception:
-              continue
+              return json.loads(result.stdout)
 
-          for language, amount in languages.items():
-              totals[language] = totals.get(language, 0) + amount
-
-      total_bytes = sum(totals.values())
-
-      if total_bytes == 0:
-          output = "> No language data available yet."
-      else:
-          sorted_languages = sorted(
-              totals.items(),
-              key=lambda x: x[1],
-              reverse=True
+          repos = gh_api(
+              f"users/{username}/repos?per_page=100&type=owner"
           )
 
-          # Keep languages that represent at least 1%
-          selected = [
-              (language, amount)
-              for language, amount in sorted_languages
-              if (amount / total_bytes) * 100 >= 1
-          ]
+          totals = {}
 
-          badges = []
+          for repo in repos:
+              if repo.get("fork"):
+                  continue
 
-          colors = {
-              "Python": "3776AB",
-              "JavaScript": "F7DF1E",
-              "TypeScript": "3178C6",
-              "PHP": "777BB4",
-              "C": "A8B9CC",
-              "C++": "00599C",
-              "Java": "ED8B00",
-              "C#": "512BD4",
-              "HTML": "E34F26",
-              "CSS": "1572B6",
-              "Blade": "FF2D20",
-              "Shell": "89E051",
-              "SQL": "336791",
-              "Dart": "0175C2",
-              "Go": "00ADD8",
-              "Ruby": "CC342D",
-              "Kotlin": "7F52FF",
-              "Swift": "F05138"
-          }
+              name = repo["name"]
 
-          logos = {
-              "Python": "python",
-              "JavaScript": "javascript",
-              "TypeScript": "typescript",
-              "PHP": "php",
-              "C": "c",
-              "C++": "cplusplus",
-              "Java": "java",
-              "C#": "csharp",
-              "HTML": "html5",
-              "CSS": "css3",
-              "Blade": "laravel",
-              "Shell": "gnubash",
-              "SQL": "mysql",
-              "Dart": "dart",
-              "Go": "go",
-              "Ruby": "ruby",
-              "Kotlin": "kotlin",
-              "Swift": "swift"
-          }
+              try:
+                  languages = gh_api(
+                      f"repos/{username}/{name}/languages"
+                  )
+              except Exception:
+                  continue
 
-          for language, amount in selected:
-              percentage = amount / total_bytes * 100
-              percent = round(percentage, 1)
+              for language, amount in languages.items():
+                  totals[language] = totals.get(language, 0) + amount
 
-              color = colors.get(language, "555555")
-              logo = logos.get(language, "")
+          total_bytes = sum(totals.values())
 
-              label = urllib.parse.quote(language)
-              value = urllib.parse.quote(f"{percent}%")
-
-              badge = (
-                  f"![{language}]"
-                  f"(https://img.shields.io/badge/"
-                  f"{label}-{value}-{color}"
-                  f"?style=for-the-badge"
+          if total_bytes == 0:
+              output = "> No language data available yet."
+          else:
+              sorted_languages = sorted(
+                  totals.items(),
+                  key=lambda x: x[1],
+                  reverse=True
               )
 
-              if logo:
-                  badge += f"&logo={logo}&logoColor=white"
+              selected = [
+                  (language, amount)
+                  for language, amount in sorted_languages
+                  if (amount / total_bytes) * 100 >= 1
+              ]
 
-              badge += ")"
+              badges = []
 
-              badges.append(badge)
+              colors = {
+                  "Python": "3776AB",
+                  "JavaScript": "F7DF1E",
+                  "TypeScript": "3178C6",
+                  "PHP": "777BB4",
+                  "C": "A8B9CC",
+                  "C++": "00599C",
+                  "Java": "ED8B00",
+                  "C#": "512BD4",
+                  "HTML": "E34F26",
+                  "CSS": "1572B6",
+                  "Blade": "FF2D20",
+                  "Shell": "89E051",
+                  "SQL": "336791",
+                  "Dart": "0175C2",
+                  "Go": "00ADD8",
+                  "Ruby": "CC342D",
+                  "Kotlin": "7F52FF",
+                  "Swift": "F05138"
+              }
 
-          output = "\n".join(badges)
+              logos = {
+                  "Python": "python",
+                  "JavaScript": "javascript",
+                  "TypeScript": "typescript",
+                  "PHP": "php",
+                  "C": "c",
+                  "C++": "cplusplus",
+                  "Java": "java",
+                  "C#": "csharp",
+                  "HTML": "html5",
+                  "CSS": "css3",
+                  "Blade": "laravel",
+                  "Shell": "gnubash",
+                  "SQL": "mysql",
+                  "Dart": "dart",
+                  "Go": "go",
+                  "Ruby": "ruby",
+                  "Kotlin": "kotlin",
+                  "Swift": "swift"
+              }
 
-      readme = "README.md"
+              for language, amount in selected:
+                  percentage = amount / total_bytes * 100
+                  percent = round(percentage, 1)
 
-      with open(readme, "r", encoding="utf-8") as f:
-          content = f.read()
+                  color = colors.get(language, "555555")
+                  logo = logos.get(language, "")
 
-      start = "<!-- START_DYNAMIC_TECH_STACK -->"
-      end = "<!-- END_DYNAMIC_TECH_STACK -->"
+                  label = urllib.parse.quote(language)
+                  value = urllib.parse.quote(f"{percent}%")
 
-      replacement = (
-          start
-          + "\n"
-          + output
-          + "\n"
-          + end
-      )
+                  badge = (
+                      f"![{language}]"
+                      f"(https://img.shields.io/badge/"
+                      f"{label}-{value}-{color}"
+                      f"?style=for-the-badge"
+                  )
 
-      start_pos = content.find(start)
-      end_pos = content.find(end)
+                  if logo:
+                      badge += f"&logo={logo}&logoColor=white"
 
-      if start_pos == -1 or end_pos == -1:
-          raise SystemExit(
-              "Dynamic tech stack markers were not found."
+                  badge += ")"
+
+                  badges.append(badge)
+
+              output = "\n".join(badges)
+
+          readme = "README.md"
+
+          with open(readme, "r", encoding="utf-8") as f:
+              content = f.read()
+
+          start = "<!-- START_DYNAMIC_TECH_STACK -->"
+          end = "<!-- END_DYNAMIC_TECH_STACK -->"
+
+          replacement = (
+              start
+              + "\n"
+              + output
+              + "\n"
+              + end
           )
 
-      end_pos += len(end)
+          start_pos = content.find(start)
+          end_pos = content.find(end)
 
-      content = (
-          content[:start_pos]
-          + replacement
-          + content[end_pos:]
-      )
+          if start_pos == -1 or end_pos == -1:
+              raise SystemExit(
+                  "Dynamic tech stack markers were not found."
+              )
 
-      with open(readme, "w", encoding="utf-8") as f:
-          f.write(content)
+          end_pos += len(end)
 
-      print("Updated tech stack:")
-      print(output)
-      PY
+          content = (
+              content[:start_pos]
+              + replacement
+              + content[end_pos:]
+          )
 
-  - name: Commit changes
-    run: |
-      git config user.name "github-actions[bot]"
-      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          with open(readme, "w", encoding="utf-8") as f:
+              f.write(content)
 
-      git add README.md
+          print("Updated tech stack:")
+          print(output)
+          PY
 
-      if git diff --cached --quiet; then
-        echo "No changes."
-      else
-        git commit -m "chore: update dynamic tech stack"
-        git push
-      fi
-```
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add README.md
+          
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "chore: update dynamic tech stack"
+            git push
+          fi
