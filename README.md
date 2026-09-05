@@ -6,9 +6,9 @@
 
 <img src="demo_small.gif" width="100%" alt="Demo animation">
 
-### 👨‍💻 Full-Stack Web Developer & Automation Specialist
+### Developer & Automation Specialist
 
-I focus on building robust web applications, automated software tools, and secure backend architectures.
+I focus on building robust web applications and automated software tools.
 
 ### 🛠️ Tech Stack & Capabilities
 
